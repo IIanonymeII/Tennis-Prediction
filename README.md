@@ -9,7 +9,7 @@ For the code i copy https://github.com/VincentAuriau/Tennis-Prediction (he works
 ## Linux 
 
 ```
-git clone ...
+git clone https://github.com/IIanonymeII/Tennis-Prediction.git
 cd Tennis-Prediction
 python -r requirement.txt
 
@@ -36,7 +36,7 @@ It's create a data file in `Data_year` folder
 
 ### Data_Treatment (Data_Treatment.py)
 ```
-python3 Data_Treatment --year 2022
+python3 Data_Treatment.py --year 2022
 
 ```
 - `--year`: year to study (int)
@@ -47,7 +47,7 @@ It's create a reversed_indicator_dicts file in `reversed_indicators_dicts_year` 
 
 ### Data_treatment_for_prediction (Data_treatment_for_predictio.py)
 ```
-python3 Data_treatment_for_predictio.py --year_study 2022 --year_model 2021
+python3 Data_treatment_for_prediction.py --year_study 2022 --year_model 2021
 
 ```
 - `--year_study`: year to study (int)
