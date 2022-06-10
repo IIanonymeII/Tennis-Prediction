@@ -3,7 +3,19 @@ import pickle
 import keras
 import pandas as pd
 import web_scrapping
+import datetime
+import argparse
 
+parser = argparse.ArgumentParser(description='Code for player')
+parser.add_argument('--test', help='yeau to study (int)', default=False) #choisir le nom du ficher
+args = parser.parse_args()
+test_arg = bool(args.test)
+
+
+
+date_now = datetime.date.today()
+
+ 
 
 def retrieve_percentages(player_id, srface):
     df_players = pd.read_csv('Players_Statistics_.csv')
@@ -24,6 +36,8 @@ def retrieve_percentages(player_id, srface):
 
 # MODEL PARAMETERS
 liste = web_scrapping.main()
+
+df_test = pd.DataFrame(columns=['Player_1', 'pourcentage_victory_1',  'Player_1', 'pourcentage_victory_2', 'tournoi'])
 
 for i in liste:
     print("\n\n\n\n===============================================================================\n\n\n\n")
@@ -252,3 +266,18 @@ for i in liste:
     print('What will ne the results?')
     print(name_p1, ':', prediction[0][0]*100, '% Chances of victory')
     print(name_p2, ':', prediction[0][1]*100, '% Chances of victory')
+
+    
+    
+    if test_arg:
+        add_test = pd.DataFrame([[name_p1, prediction[0][0]*100,  name_p2, prediction[0][1]*100, tournament]],
+                                                    columns=['Player_1', 'pourcentage_victory_1',  'Player_1', 'pourcentage_victory_2', 'tournoi'])
+        
+        try :
+            df_test = df_test.append(add_test)
+            
+        except:
+            print("\n\n\n\n===================== ereur =====================\n\n\n\n")
+    
+if test_arg:                                          
+    df_test.to_csv('test_stat'+'_'+str(date_now.strftime("%d"))+'_'+str(date_now.strftime("%m"))+'_'+str(date_now.strftime("%Y"))+'.csv', index=False)
