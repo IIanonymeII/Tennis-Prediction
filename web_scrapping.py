@@ -82,15 +82,26 @@ def info_joueur(liste_url_player,liste_tournoi):
                     if "Classement" in str(k):
                         classement = ""
                         classement_bool = False
+                        si_1er = False
                         for l in str(k):
                             if l == 'è':
                                 break
+
+                            elif si_1er and classement_bool :
+                                if l =='r':
+                                    break
+                                else:
+                                    si_1er = False
+
+                            elif l == 'e':
+                                si_1er = True
+
                             if classement_bool :
                                 classement += l 
                             elif l ==':':
                                 classement_bool = True
                                 
-                        classement = classement.replace(" ","")
+                        classement = classement.replace(" ","").replace("e","")
                         try :
                             test_classement = int(classement)
                         except:
@@ -128,7 +139,22 @@ def info_joueur(liste_url_player,liste_tournoi):
 
                 elif name == "Taylor Fritz":
                     url = "https://www.tennisendirect.net/atp/taylor-harry-fritz/"
-                    
+
+                elif name == "Albert Ramos":
+                    url = "https://www.tennisendirect.net/atp/albert-ramos-vinolas/"
+
+                elif name == "Stan Wawrinka":
+                    url = "https://www.tennisendirect.net/atp/stanislas-wawrinka/"
+                
+                elif name == "Frances Tiafoe":
+                    url = "https://www.tennisendirect.net/atp/francis-tiafoe"
+
+                elif name == "Diego Schwartzman":
+                    url = "https://www.tennisendirect.net/atp/diego-sebastian-schwartzman/"
+                
+                elif name == "Cristian Garin":
+                    url = "https://www.tennisendirect.net/atp/christian-garin/"
+
                 else:
 
                     name_url = unidecode.unidecode(name.lower().replace(" ","-").replace("'",""))
@@ -142,8 +168,12 @@ def info_joueur(liste_url_player,liste_tournoi):
                 # print(r1)
                 bar()
                 soup1 = BeautifulSoup(r1.content, 'html.parser')
-                test = soup1.find("div",{'class':"player_stats"}).getText().replace(' ','').replace('\n','')
-                proba = test[ len(test)-7: len(test)].replace('%','').replace("\n","").replace(":","").replace("e","").replace("i","").replace("t","")
+                try :
+                    test = soup1.find("div",{'class':"player_stats"}).getText().replace(' ','').replace('\n','')
+                    proba = test[ len(test)-7: len(test)].replace('%','').replace("\n","").replace(":","").replace("e","").replace("i","").replace("t","")
+                except:
+                    print("\n\n\n\n ================= ERREUR ============= \n\n\n\n")
+                    print("proba not working                     url : ",url,"            name : ",name)
                 bool_ = False
                 bon = False
                 transi = ""
@@ -197,6 +227,15 @@ def info_joueur(liste_url_player,liste_tournoi):
                 except :
                     print("\n\n\n\n ================= ERREUR ============= \n\n\n\n")
                     print("victoire erreur not int :",victoire)
+                
+                name = name.replace("-"," ")
+                if name == "Holger Vitus Nodskov Rune":
+                    name = "Holger Rune"
+                elif name == "Mackenzie McDonald":
+                    name = "Mackenzie Mcdonald"
+                elif name == "Félix Auger Aliassime":
+                    name = "Felix Auger Aliassime"
+
 
                 df_players = pd.read_csv('Players_Statistics_.csv')
 
@@ -214,6 +253,8 @@ def info_joueur(liste_url_player,liste_tournoi):
                     print("erreur avec le .csv")
                 # print(name)
                 # print("\n\n\n\n===============================================================================\n\n\n\n")
+                
+
                 liste_player[k1].append({"name":name,"id":id_,"classement": classement,"age": age,"Taille":taille,"Poids":poids,"proba":proba,"points":point,"last_5_matches_win":victoire})
             k1+=1
     return liste_player
@@ -232,9 +273,11 @@ def match_dans_base_de_donnee(liste_player):
         k += 1
 
     liste_sup.sort(reverse = True)
+    print("\n\n\n======================= pas dans base de donnée ======================\n\n\n")
     for i in liste_sup:
+        print(liste_player[i],end="\n\n")
         del liste_player[i]
-
+    print("\n\n\n======================= ======================\n\n\n")
     return liste_player
 
 
