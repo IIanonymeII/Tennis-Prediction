@@ -193,8 +193,11 @@ df_data_players = pd.DataFrame(columns=['name', 'id',  'ranking', 'ranking_point
                                         'winning_on_1st_serve_percentage', 'winning_on_2nd_serve_percentage',
                                         'overall_win_on_serve_percentage', 'breakpoint_faced_percentage',
                                         'breakpoint_saved_percentage'])
+print("=======================================================================================")
 print(df_data_players)
+print("=======================================================================================")
 for player in players_list_dict.keys():
+    print("===>",[players_list_dict[player].get_data_profile()],"<===")
     df_to_add = pd.DataFrame([players_list_dict[player].get_data_profile()],
                                             columns=['name', 'id',  'ranking', 'ranking_points', 'born_year', 'versus',
                                                      'hand', 'height', 'victory_percentage', 'clay_victory_percentage',
