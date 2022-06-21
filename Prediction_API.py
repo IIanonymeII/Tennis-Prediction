@@ -7,9 +7,9 @@ import datetime
 import argparse
 
 parser = argparse.ArgumentParser(description='Code for player')
-parser.add_argument('--test', help='yeau to study (int)', default=False) #choisir le nom du ficher
+parser.add_argument('--csv_test', help='yeau to study (int)', default=False) #choisir le nom du ficher
 args = parser.parse_args()
-test_arg = bool(args.test)
+test_arg = bool(args.csv_test)
 
 
 
@@ -37,7 +37,7 @@ def retrieve_percentages(player_id, srface):
 # MODEL PARAMETERS
 liste = web_scrapping.main()
 
-df_test = pd.DataFrame(columns=['Player_1', 'pourcentage_victory_1',  'Player_1', 'pourcentage_victory_2', 'tournoi'])
+df_test = pd.DataFrame(columns=['tournoi','Player', 'pourcentage_victory' ,'reel_score'])
 
 for i in liste:
     print("\n\n\n\n===============================================================================\n\n\n\n")
@@ -57,9 +57,9 @@ for i in liste:
     # INPUT DATA
 
     # Match
-    tournament = i[0]
+    tournament = i[0].title()
     surface = 'Grass'
-    level = 'G'
+    level = 'D' #A to G  A match pas pris au serieux et G pris au serieux
 
     # Player 1
 
@@ -70,7 +70,7 @@ for i in liste:
     points_p1 = int(i[1]["points"])
     hand_p1 = 'R'
     height_p1 = int(i[1]["Taille"])
-    fatigue_p1 = 3
+    fatigue_p1 = 0                  #max 28.285714285714285 et min 0.0  si max pleine forme 0 eclatax
     age_p1 = int(i[1]["age"])
 
     percentages_p1 = retrieve_percentages(id_p1, surface)
@@ -90,7 +90,7 @@ for i in liste:
     points_p2 = int(i[2]["points"])
     hand_p2 = 'R'
     height_p2 = int(i[2]["Taille"])
-    fatigue_p2 = 3
+    fatigue_p2 = 0
     age_p2 = int(i[2]["age"])
 
     percentages_p2 = retrieve_percentages(id_p2, surface)
@@ -270,8 +270,8 @@ for i in liste:
     
     
     if test_arg:
-        add_test = pd.DataFrame([[name_p1, prediction[0][0]*100,  name_p2, prediction[0][1]*100, tournament]],
-                                                    columns=['Player_1', 'pourcentage_victory_1',  'Player_1', 'pourcentage_victory_2', 'tournoi'])
+        add_test = pd.DataFrame([[],[tournament,name_p1, prediction[0][0]*100   ],[   tournament,name_p2, prediction[0][1]*100]],
+                                                    columns=['tournoi','Player', 'pourcentage_victory' ])
         
         try :
             df_test = df_test.append(add_test)
